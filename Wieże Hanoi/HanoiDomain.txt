@@ -1,0 +1,46 @@
+(define
+    (domain hanoi)
+    (:requirements :adl)
+    (:predicates
+        (smaller ?k1 ?k2)
+        (palik ?x)
+        (na_paliku ?x ?k)
+    )
+    ;
+    (:action przesun
+        :parameters (?x ?y ?k1 ?k2)
+        :precondition
+        (and
+            (not (= ?x ?y))
+            (not (= ?k1 ?k2))
+            (palik ?x)
+            (palik ?y)
+            (na_paliku ?x ?k1)
+            (na_paliku ?y ?k2)
+            (smaller ?k1 ?k2)
+            (not (exists (?m) (and (smaller ?m ?k1) (na_paliku ?x ?m))))
+            (not (exists (?n) (and (smaller ?n ?k2) (na_paliku ?y ?n))))
+        )
+        :effect
+        (and
+            (not (na_paliku ?x ?k1))
+            (na_paliku ?y ?k1)
+        )
+    )
+    (:action przesun-na-pusty
+        :parameters (?x ?y ?k)
+        :precondition
+        (and 
+            (not (= ?x ?y))
+            (palik ?x)
+            (palik ?y)
+            (na_paliku ?x ?k)
+            (not (exists (?m) (na_paliku ?y ?m)))
+            (not (exists (?n) (and (smaller ?n ?k) (na_paliku ?x ?n))))
+        )
+        :effect (and 
+            (not (na_paliku ?x ?k))
+            (na_paliku ?y ?k)
+        )
+    )
+)
