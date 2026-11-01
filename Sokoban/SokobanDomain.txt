@@ -1,0 +1,59 @@
+(define
+    (domain sokoban)
+    (:requirements :adl)
+    (:predicates
+        (cel ?x)
+        (paczka ?x)
+        (robot ?x)
+        (idz ?x ?y) 
+        (pchaj ?x ?y ?z) 
+        (poziomo ?x ?y) 
+        (pionowo ?x ?y) 
+    )
+    (:action idz
+        :parameters (?x ?y)
+        :precondition
+        (and
+            (not(= ?x ?y))
+            (robot ?x)
+            (or
+                (poziomo ?x ?y)
+                (pionowo ?x ?y)
+            )
+            (not (paczka ?y))
+        )
+        :effect
+        (and
+            (not (robot ?x))
+            (robot ?y)
+        )
+    )
+    (:action pchaj
+        :parameters (?x ?y ?z)
+        :precondition
+        (and
+            (not (= ?x ?y))
+            (not (= ?x ?z))
+            (not (= ?z ?y))
+            (robot ?x)
+            (or
+                (and
+                (poziomo ?x ?y)
+                (poziomo ?y ?z)
+                )
+                (and
+                (pionowo ?y ?z)
+                (pionowo ?x ?y))
+            )
+            (not (paczka ?z))
+            (paczka ?y)
+        )
+        :effect
+        (and
+            (not (robot ?x))
+            (robot ?y)
+            (not (paczka ?y))
+            (paczka ?z)
+        )
+    )
+)
